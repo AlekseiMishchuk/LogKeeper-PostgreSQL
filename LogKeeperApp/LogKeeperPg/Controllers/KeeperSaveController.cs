@@ -39,7 +39,7 @@ public class KeeperSaveController : Controller
         try
         {
             var logId = Guid.NewGuid();
-            await _postgresDbContext.AddAsync(new LogInformation(logId, title, author, project, contents));
+            await _postgresDbContext.AddAsync(new LogInformation(logId, title, author, project, DateTime.UtcNow, contents));
             await _postgresDbContext.SaveChangesAsync();
             var urlFormat = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{GetValuePath}";
             return StatusCode(200, new

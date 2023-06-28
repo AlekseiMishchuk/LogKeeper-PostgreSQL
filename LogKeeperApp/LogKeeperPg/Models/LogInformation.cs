@@ -11,12 +11,14 @@ public class LogInformation
         string title,
         string author,
         string project,
+        DateTime time,
         string contents)
     {
         Uuid = uuid;
         Title = title;
         Author = author;
         Project = project;
+        Time = time;
         Contents = contents;
     }
 
@@ -31,6 +33,8 @@ public class LogInformation
     [Required] [MaxLength(50)] public string Author { get; set; }
 
     [Required] [MaxLength(50)] public string Project { get; set; }
+    
+    [Required] public DateTime Time { get; set; }
 
     [Required] public string Contents { get; set; }
 }
