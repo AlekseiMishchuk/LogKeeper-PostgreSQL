@@ -83,12 +83,12 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost/get-log?id=1426b985-0884-4c34-b612-e934a4f08053",
+			"name": "http://localhost/get-log?id={0}",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/get-log?id=1426b985-0884-4c34-b612-e934a4f08053",
+					"raw": "http://localhost/get-log?id={0}",
 					"protocol": "http",
 					"host": [
 						"log",
@@ -101,7 +101,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "1426b985-0884-4c34-b612-e934a4f08054"
+							"value": "{0}"
 						}
 					]
 				}
