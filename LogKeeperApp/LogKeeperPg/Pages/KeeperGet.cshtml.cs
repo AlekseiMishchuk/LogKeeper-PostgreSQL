@@ -23,17 +23,25 @@ public class KeeperGet : PageModel
         {
             try
             {
-                LogInfo = await _postgresDbContext.Logs.Where(x => x.Uuid == Guid.Parse(id)).FirstOrDefaultAsync();
-                if (LogInfo == null)
+                var guid = Guid.Parse(id);
+                try
                 {
-                    return StatusCode(200, "Log not found");
-                }
+                    LogInfo = await _postgresDbContext.Logs.Where(x => x.Uuid == guid).FirstOrDefaultAsync();
+                    if (LogInfo == null)
+                    {
+                        return StatusCode(200, "Log not found");
+                    }
 
-                return Page();
+                    return Page();
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(200, e);
+                }
             }
             catch (Exception e)
             {
-                return StatusCode(200, e);
+                return StatusCode(200, "Wrong id");
             }
         }
         else
