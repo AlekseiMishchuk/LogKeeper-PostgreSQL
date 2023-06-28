@@ -1,9 +1,10 @@
-version: '3.9'
+version: '3.3'
 services:
   log-keeper:
     build:
       context: .
       dockerfile: ./LogKeeperPg/Dockerfile
+    restart: always
     ports:
       - 80:80
       - 443:443
