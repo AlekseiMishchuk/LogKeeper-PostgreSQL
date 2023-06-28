@@ -11,11 +11,11 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Content Include="..\docker-compose-app.yml">
-        <Link>docker-compose-app.yml</Link>
-      </Content>
       <Content Include="..\docker-compose-local-postgresql.yml">
         <Link>docker-compose-local-postgresql.yml</Link>
+      </Content>
+      <Content Include="..\docker-compose.yml">
+        <Link>docker-compose.yml</Link>
       </Content>
     </ItemGroup>
 
