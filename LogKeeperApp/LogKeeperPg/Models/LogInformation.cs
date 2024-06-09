@@ -7,6 +7,7 @@ namespace LogKeeperPg.Models;
 [Index(nameof(LogInformation.Uuid), IsUnique = true)]
 public class LogInformation
 {
+    public LogInformation() { }
     public LogInformation(Guid uuid,
         string title,
         string author,

@@ -1,4 +1,5 @@
 using LogKeeperPg.Data;
+using LogKeeperPg.FakeLogs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,5 +29,11 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedFakeData.Initialize(services);
+}
 
 app.Run();
