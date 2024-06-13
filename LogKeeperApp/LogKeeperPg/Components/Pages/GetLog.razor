@@ -1,0 +1,57 @@
+@page "/get-log/{id}"
+@using LogKeeperPg.Data
+@using LogKeeperPg.Models
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+
+@inject PostgresDbContext DbContext
+
+<h1>@_title</h1>
+
+@if (_logInfo != null)
+{
+    <div>
+        <h2>@_logInfo.Author</h2>
+        <p>@_logInfo.Title</p>
+        <p>@_logInfo.Time</p>
+    </div>
+}
+
+@code{
+    [Parameter]
+    public string? Id { get; set; }
+
+    private string _title = string.Empty;
+    private LogInformation? _logInfo;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            try
+            {
+                var guid = Guid.Parse(Id);
+                try
+                {
+                    _logInfo = await DbContext.Logs.Where(x => x.Uuid == guid).FirstOrDefaultAsync();
+                    if (_logInfo == null)
+                    {
+                        _title = "Log not found";
+                    }
+                }
+                catch 
+                {
+                    _title = "An error occurred while retrieving the log information";
+                }
+            }
+            catch
+            {
+                _title = "Wrong id";
+            }
+        }
+        else
+        {
+            _title = "Identifier not set";
+        }
+    }
+}
