@@ -11,9 +11,12 @@
 @if (_logInfo != null)
 {
     <div>
-        <h2>@_logInfo.Author</h2>
-        <p>@_logInfo.Title</p>
+        <h1>@_logInfo.Title</h1>
+        <p>@_logInfo.Project</p>
+        <p>@_logInfo.Author</p>
         <p>@_logInfo.Time</p>
+        <hr class="border-2 opacity-50"/>
+        <p>@_logInfo.Contents</p>
     </div>
 }
 
