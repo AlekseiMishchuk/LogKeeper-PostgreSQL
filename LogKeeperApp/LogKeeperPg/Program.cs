@@ -1,6 +1,7 @@
 using LogKeeperPg.Components;
 using LogKeeperPg.Components.Pages;
 using LogKeeperPg.Data;
+using LogKeeperPg.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddRazorComponents(options =>
 builder.Services.AddDbContext<PostgresDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgConnection")));
 builder.Services.AddHttpClient<GetLog>(client => client.BaseAddress = new Uri(route));
+builder.Services.AddSingleton<GlobalVariablesService>();
+builder.Services.AddScoped<LogService>();
 
 builder.Services.AddBlazorBootstrap();
 

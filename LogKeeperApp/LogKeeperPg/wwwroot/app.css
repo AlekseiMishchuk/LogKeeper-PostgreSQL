@@ -27,3 +27,17 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.log-preview-block {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: white;
+    transition: transform 0.15s ease;
+}
+
+.log-preview-block:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}

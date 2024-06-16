@@ -1,0 +1,60 @@
+@using LogKeeperPg.Models
+@using LogKeeperPg.Services
+@inject LogService LogService
+@inject GlobalVariablesService Variables
+
+@if (_logs != null)
+{
+    <div class="vstack gap-2" >
+
+        @foreach (var log in _logs)
+        {
+            <div class="log-preview-block">
+                <div><h5>@log.Title</h5></div>
+                <div>@log.Time</div>
+            </div>
+
+        }
+    </div>
+    
+    @if (_logs.Count > Variables.ElementsPerPage)
+    {
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+else
+{
+<div class="d-flex align-items-center" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+        <strong role="status" style="margin-right: 10px">Loading...</strong>
+        <div class="spinner-border " aria-hidden="true"></div>
+</div>
+}
+
+
+
+@code {
+    private List<LogInformation>? _logs;
+    private int _pageCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _logs = await LogService.GetLogsAsync(1);
+        _pageCount = await LogService.GetLogsCountAsync() / Variables.ElementsPerPage;
+    }
+}
