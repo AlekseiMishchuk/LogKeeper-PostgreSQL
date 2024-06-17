@@ -6,28 +6,28 @@ namespace LogKeeperPg.Services;
 
 public class LogService
 {
-    private static PostgresDbContext Context;
-    private static GlobalVariablesService Variables;
+    private readonly PostgresDbContext _context;
+    private readonly GlobalVariablesService _variables;
     
     public LogService(PostgresDbContext context, GlobalVariablesService variables)
     {
-        Context = context;
-        Variables = variables;
+        _context = context;
+        _variables = variables;
     }
 
-    public static async Task<List<LogInformation>> GetLogsAsync(int pageNumber)
+    public async Task<List<LogInformation>> GetLogsByPageAsync(int pageNumber)
     {
         
-        var logList =  await Context.Logs
+        var logList =  await _context.Logs
             .OrderByDescending(log => log.Time)
-            .Skip((pageNumber - 1) * Variables.ElementsPerPage)
-            .Take(Variables.ElementsPerPage)
+            .Skip((pageNumber - 1) * _variables.ElementsPerPage)
+            .Take(_variables.ElementsPerPage)
             .ToListAsync();
         return logList;
     }
     
-    public static async Task<int> GetLogsCountAsync()
+    public async Task<int> GetLogsCountAsync()
     {
-        return await Context.Logs.CountAsync();
+        return await _context.Logs.CountAsync();
     }
 }

@@ -1,3 +1,13 @@
 ﻿@page "/"
+@page "/loglist/{CurrentPage:int}"
 
-<LogList/>
+<CascadingValue Value="@CurrentPage">
+    <LogList/>
+</CascadingValue>
+
+
+@code
+{
+    [Parameter]
+    public int CurrentPage { get; set; } = 1;
+}

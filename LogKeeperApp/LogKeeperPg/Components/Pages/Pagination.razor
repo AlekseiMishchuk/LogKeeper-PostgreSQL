@@ -1,0 +1,59 @@
+@using LogKeeperPg.Services
+
+@inject GlobalVariablesService Variables
+@inject LogService LogService
+
+    <nav class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item @(CurrentPage <= 1 ? "disabled" : "")">
+                <a class="page-link" href="/loglist/@(CurrentPage - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for (var pageNumber = _minPagesThreshold; pageNumber < _maxPagesThreshold; pageNumber++)
+            {
+                @if (pageNumber == CurrentPage)
+                {
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">@pageNumber</span>
+                    </li>
+                    continue;
+                }
+                
+                <li class="page-item"><a class="page-link" href="/loglist/@pageNumber"> @pageNumber </a></li>
+            }
+            
+            <li class="page-item @(CurrentPage >= _totalPages ? "disabled" : "")">
+                    <a class="page-link" href="/loglist/@(CurrentPage + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+
+@code {
+    [CascadingParameter]
+    public int CurrentPage { get; set; }
+    [Parameter]
+    public EventCallback OnLogListInitializationComplete { get; set; }
+    [Parameter]
+    public required TaskCompletionSource<bool> ParentTaskCompletion { get; set; }
+
+    private int _totalPages;
+    private int _minPagesThreshold;
+    private int _maxPagesThreshold;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await ParentTaskCompletion.Task;
+        _totalPages = await LogService.GetLogsCountAsync() / Variables.ElementsPerPage;
+        CalculatePageThresholds();
+    }
+    
+    private void CalculatePageThresholds()
+    {
+        _minPagesThreshold = Math.Max(CurrentPage - Variables.PaginationElements / 2, 1);
+        var pagesRight= (int)Math.Ceiling(Variables.PaginationElements / 2.0);
+        _maxPagesThreshold = Math.Min(CurrentPage + pagesRight, _totalPages);
+    }
+}

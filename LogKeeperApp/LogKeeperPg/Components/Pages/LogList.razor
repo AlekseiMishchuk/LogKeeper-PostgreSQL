@@ -1,13 +1,14 @@
 @using LogKeeperPg.Models
 @using LogKeeperPg.Services
+
 @inject LogService LogService
 @inject GlobalVariablesService Variables
 
-@if (_logs != null)
+@if (_currentPageLogs != null)
 {
-    <div class="vstack gap-2" >
+    <div class="vstack gap-2" style="padding-top: 10px; padding-bottom: 10px">
 
-        @foreach (var log in _logs)
+        @foreach (var log in _currentPageLogs)
         {
             <div class="log-preview-block">
                 <div><h5>@log.Title</h5></div>
@@ -17,44 +18,42 @@
         }
     </div>
     
-    @if (_logs.Count > Variables.ElementsPerPage)
+    @if (_totalLogsCount > Variables.ElementsPerPage)
     {
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <Pagination ParentTaskCompletion="@_parentTaskCompletion"/>
     }
 }
 else
 {
 <div class="d-flex align-items-center" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
         <strong role="status" style="margin-right: 10px">Loading...</strong>
-        <div class="spinner-border " aria-hidden="true"></div>
+        <div class="spinner-border" aria-hidden="true"></div>
 </div>
 }
 
 
 
 @code {
-    private List<LogInformation>? _logs;
-    private int _pageCount;
+    [CascadingParameter]
+    public int CurrentPage { get; set; }
+    
+    [Parameter]
+    public EventCallback OnLogListInitializationComplete { get; set; }
+
+    private TaskCompletionSource<bool> _parentTaskCompletion = new();
+    private List<LogInformation>? _currentPageLogs;
+    private int _totalLogsCount;
 
     protected override async Task OnInitializedAsync()
     {
-        _logs = await LogService.GetLogsAsync(1);
-        _pageCount = await LogService.GetLogsCountAsync() / Variables.ElementsPerPage;
+        _totalLogsCount = await LogService.GetLogsCountAsync();
+        _currentPageLogs = await LogService.GetLogsByPageAsync(1);
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrentPage = Math.Max(CurrentPage, 1);
+        _currentPageLogs = await LogService.GetLogsByPageAsync(CurrentPage);
+        _parentTaskCompletion.SetResult(true);
     }
 }
