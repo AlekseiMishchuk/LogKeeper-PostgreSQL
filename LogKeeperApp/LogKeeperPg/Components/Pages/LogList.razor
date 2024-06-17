@@ -2,15 +2,15 @@
 @using LogKeeperPg.Services
 
 @inject LogService LogService
+@inject NavigationManager NavigationManager
 @inject GlobalVariablesService Variables
 
 @if (_currentPageLogs != null)
 {
     <div class="vstack gap-2" style="padding-top: 10px; padding-bottom: 10px">
-
         @foreach (var log in _currentPageLogs)
         {
-            <div class="log-preview-block">
+            <div class="log-preview-block" role ="button" @onclick="() => NavigateToLogDetails(log.Uuid)">
                 <div><h5>@log.Title</h5></div>
                 <div>@log.Time</div>
             </div>
@@ -34,11 +34,8 @@ else
 
 
 @code {
-    [CascadingParameter]
+    [CascadingParameter] 
     public int CurrentPage { get; set; }
-    
-    [Parameter]
-    public EventCallback OnLogListInitializationComplete { get; set; }
 
     private TaskCompletionSource<bool> _parentTaskCompletion = new();
     private List<LogInformation>? _currentPageLogs;
@@ -49,11 +46,16 @@ else
         _totalLogsCount = await LogService.GetLogsCountAsync();
         _currentPageLogs = await LogService.GetLogsByPageAsync(1);
     }
-    
+
     protected override async Task OnParametersSetAsync()
     {
         CurrentPage = Math.Max(CurrentPage, 1);
         _currentPageLogs = await LogService.GetLogsByPageAsync(CurrentPage);
         _parentTaskCompletion.SetResult(true);
+    }
+
+    private void NavigateToLogDetails(Guid uuid)
+    {
+        NavigationManager.NavigateTo($"/get-log/{uuid.ToString()}");
     }
 }

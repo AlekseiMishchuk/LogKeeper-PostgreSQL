@@ -53,7 +53,12 @@
     private void CalculatePageThresholds()
     {
         _minPagesThreshold = Math.Max(CurrentPage - Variables.PaginationElements / 2, 1);
-        var pagesRight= (int)Math.Ceiling(Variables.PaginationElements / 2.0);
-        _maxPagesThreshold = Math.Min(CurrentPage + pagesRight, _totalPages);
+        _maxPagesThreshold = Math.Min(CurrentPage + Variables.PaginationElements / 2, _totalPages);
+        
+        var pageElementsOnScreen = _maxPagesThreshold - _minPagesThreshold;
+        if (pageElementsOnScreen < Variables.PaginationElements)
+        {
+            _maxPagesThreshold = _minPagesThreshold + Variables.PaginationElements;
+        }
     }
 }

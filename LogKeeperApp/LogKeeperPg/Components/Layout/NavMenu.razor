@@ -1,5 +1,16 @@
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
 <nav class="navbar bg-body-tertiary" data-bs-theme="dark">
     <div class="container">
-        <span class="navbar-brand mb-0 h1">LogKeeper</span>
+        <span class="navbar-brand mb-0 h1" role="button" @onclick="NavigateToHome">LogKeeper</span>
     </div>
 </nav>
+
+@code
+{
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
