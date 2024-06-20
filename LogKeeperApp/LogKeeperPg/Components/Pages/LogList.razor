@@ -5,16 +5,20 @@
 @inject NavigationManager NavigationManager
 @inject GlobalVariablesService Variables
 
+
 @if (_currentPageLogs != null)
 {
     <div class="vstack gap-2" style="padding-top: 10px; padding-bottom: 10px">
         @foreach (var log in _currentPageLogs)
         {
-            <div class="log-preview-block" role ="button" @onclick="() => NavigateToLogDetails(log.Uuid)">
+            <div class="log-preview-block" 
+                 role ="button"
+                 data-bs-toggle="modal"
+                 data-bs-target="@GetLogModalId(log)">
                 <div><h5>@log.Title</h5></div>
                 <div>@log.Time</div>
             </div>
-
+            <LogModal Log="@log"/>
         }
     </div>
     
@@ -54,8 +58,5 @@ else
         _parentTaskCompletion.SetResult(true);
     }
 
-    private void NavigateToLogDetails(Guid uuid)
-    {
-        NavigationManager.NavigateTo($"/get-log/{uuid.ToString()}");
-    }
+    private string GetLogModalId(LogInformation? log) => $"#{LogModal.GetLogModalId(log)}";
 }
