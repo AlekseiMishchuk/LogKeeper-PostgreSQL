@@ -12,7 +12,12 @@
             </li>
             @for (var pageNumber = _minPagesThreshold; pageNumber < _maxPagesThreshold; pageNumber++)
             {
-                @if (pageNumber == CurrentPage)
+                if (pageNumber > _totalPages)
+                {
+                    break;
+                }
+                
+                if (pageNumber == CurrentPage)
                 {
                     <li class="page-item active" aria-current="page">
                         <span class="page-link">@pageNumber</span>
