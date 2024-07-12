@@ -6,9 +6,9 @@
             <div class="modal-header">
                 <div class="w-75">
                     <h5 class="modal-title mb-3">@Log?.Title</h5>
-                    <p>@Log?.Project</p>
-                    <p>@Log?.Author</p>
-                    <span>@Log?.Time</span>
+                    <p>Author: @Log?.Author</p>
+                    <p>Project: @Log?.Project</p>
+                    <span>Time: @Log?.Time</span>
                 </div>
                 <button type="button"
                         class="btn-close position-absolute top-0 end-0 me-3 mt-3"
@@ -16,7 +16,7 @@
                         aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>@Log?.Contents</p>
+                <p class="log-content">@Log?.Contents</p>
             </div>
         </div>
     </div>

@@ -41,3 +41,8 @@ h1:focus {
     transform: scale(1.01);
     cursor: pointer;
 }
+
+.log-content{
+    white-space: pre-line;
+    text-align: left;
+}
