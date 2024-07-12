@@ -1,6 +1,9 @@
+using EFCore.BulkExtensions;
 using LogKeeperPg.Components;
 using LogKeeperPg.Components.Pages;
 using LogKeeperPg.Data;
+using LogKeeperPg.Models;
+using LogKeeperPg.PreviousLogsToDb;
 using LogKeeperPg.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,6 +43,19 @@ app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-// app.MapControllers();
+
+var links = await SlackScraper.GetLinksFromChannelAsync();
+var logEntries = new List<LogInformation>();
+
+foreach (var link in links)
+{
+    var logEntry = await WebScraper.ScrapeLogInformation(link);
+    logEntries.Add(logEntry);
+}
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<PostgresDbContext>();
+
+await context.BulkInsertAsync(logEntries);
 
 app.Run();
