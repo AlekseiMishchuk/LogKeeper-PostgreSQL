@@ -89,4 +89,7 @@ h1:focus {
     max-height: none;
     height: auto;
     mask-image: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }

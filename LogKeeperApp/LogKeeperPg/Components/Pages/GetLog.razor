@@ -157,23 +157,6 @@
         _currentTab = tabId;
         return Task.CompletedTask;
     }
-
-    // private async Task<List<string>?> FilteringLogContent(TabId tabId)
-    // {
-    //     switch (tabId)
-    //     {
-    //         case TabId.Alarm:
-    //             return await Task.FromResult(_alarmLines);
-    //         case TabId.Cheat:
-    //             return await Task.FromResult(_cheatLines);
-    //         case TabId.Model:
-    //             return await Task.FromResult(_modelLines);
-    //         case TabId.Tutorial:
-    //             return await Task.FromResult(_tutorialLines);
-    //         default:
-    //             throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null);
-    //     }
-    // }
     
     private void CountLines()
     {
@@ -209,10 +192,8 @@
                 _tutorialCount++;
             }
             
-            var error = Regex.IsMatch(line, "error");
-            var fakeError = Regex.IsMatch(line, "error\":null");
-            if (error != fakeError)
-                _alarmCount++;
+            if (Regex.IsMatch(line, "error") && !Regex.IsMatch(line, "error\":null"))
+                _alarmCount++;        
         }
     }
 }
