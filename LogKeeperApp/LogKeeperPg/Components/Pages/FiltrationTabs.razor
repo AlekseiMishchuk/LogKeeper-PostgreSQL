@@ -1,0 +1,59 @@
+@using LogKeeperPg.Enums
+<nav>
+    <div class="nav nav-tabs thick-nav-tabs justify-content-center" id="nav-tab" role="tablist">
+        <button class="nav-link active" data-bs-toggle="tab" type="button" role="tab" 
+                @onclick="() => HandleTabClick(TabId.Raw)">Raw</button>
+        
+        @if (AlarmCount > 0)
+        {
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab"
+                    @onclick="() => HandleTabClick(TabId.Alarm)">
+                    Alarm
+                <span class="badge dark-badge">@AlarmCount</span>
+            </button>
+        }
+        @if (CheatCount > 0)
+        {
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab"
+                    @onclick="() => HandleTabClick(TabId.Cheat)">
+                    Cheats
+                <span class="badge dark-badge">@CheatCount</span>
+            </button>
+        }
+        @if (ModelCount > 0)
+        {
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab"
+                    @onclick="() => HandleTabClick(TabId.Model)">
+                    Model
+                <span class="badge dark-badge">@ModelCount</span>
+            </button>
+        }
+        @if(TutorialCount > 0)
+        {
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab"
+                    @onclick="() => HandleTabClick(TabId.Tutorial)">
+                    Tutorial
+                <span class="badge dark-badge">@TutorialCount</span>
+            </button>
+        }
+    </div>
+</nav>
+
+@code {
+    [Parameter]
+    public int AlarmCount { get; set; }
+    [Parameter]
+    public int CheatCount { get; set; }
+    [Parameter]
+    public int ModelCount { get; set; }
+    [Parameter]
+    public int TutorialCount { get; set; }
+    
+    [Parameter]
+    public EventCallback<TabId> OnTabSelected { get; set; }
+
+    private async Task HandleTabClick(TabId tabId)
+    {
+        await OnTabSelected.InvokeAsync(tabId);
+    }
+}

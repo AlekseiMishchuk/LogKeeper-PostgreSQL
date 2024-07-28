@@ -1,5 +1,7 @@
 @page "/get-log/{id}"
+@using System.Text.RegularExpressions
 @using LogKeeperPg.Data
+@using LogKeeperPg.Enums
 @using LogKeeperPg.Models
 @using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
@@ -15,8 +17,79 @@
         <p>Author: @_logInfo.Author</p>
         <p>Project: @_logInfo.Project</p>
         <p>Time: @_logInfo.Time</p>
-        <hr class="border-2 opacity-50"/>
-        <p class="log-content">@_logInfo.Contents</p>
+
+        <div class="v-offset-with-tabs">
+            <FiltrationTabs AlarmCount="_alarmCount"
+                            CheatCount="_cheatCount"
+                            ModelCount="_modelCount"
+                            TutorialCount="_tutorialCount"
+                            OnTabSelected="HandleTabSelection"/>
+        </div>
+        
+        
+        @switch (_currentTab)
+        {
+            case TabId.Raw:
+                <p class="log-content v-offset-with-tabs mt-4">@_logInfo.Contents</p>
+                break;     
+                
+            case TabId.Alarm:
+                if (_alarmLines == null)
+                    break;
+                
+                foreach (var line in _alarmLines)
+                {
+                    <div class="v-offset-with-tabs">
+                        <div class="text-block my-2" onclick="toggleExpand(this)">
+                            <div class="mask-gradient"> @line</div>
+                        </div>
+                    </div>
+                }
+                break;
+                
+            case TabId.Cheat:
+                if (_cheatLines == null)
+                    break;
+                
+                foreach (var line in _cheatLines)
+                {
+                    <div class="v-offset-with-tabs">
+                        <div class="text-block my-2" onclick="toggleExpand(this)">
+                            <div class="mask-gradient"> @line</div>
+                        </div>
+                    </div>
+                }
+                break;
+                
+            case TabId.Model:
+                if (_modelLines == null)
+                    break;
+                
+                foreach (var line in _modelLines)
+                {
+                    <div class="v-offset-with-tabs">
+                        <div class="text-block my-2" onclick="toggleExpand(this)">
+                            <div class="mask-gradient"> @line</div>
+                        </div>
+                    </div>                }
+                break;
+                
+            case TabId.Tutorial:
+                if (_tutorialLines == null)
+                    break;
+                
+                foreach (var line in _tutorialLines)
+                {
+                    <div class="v-offset-with-tabs">
+                        <div class="text-block my-2" onclick="toggleExpand(this)">
+                            <div class="mask-gradient"> @line</div>
+                        </div>
+                    </div>                }
+                break;
+                
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     </div>
 }
 
@@ -26,6 +99,23 @@
 
     private string _title = string.Empty;
     private LogInformation? _logInfo;
+    private TabId _currentTab = TabId.Raw;
+    private int _alarmCount;
+    private int _cheatCount;
+    private int _modelCount;
+    private int _tutorialCount;
+    private List<string>? _alarmLines;
+    private List<string>? _cheatLines;
+    private List<string>? _modelLines;
+    private List<string>? _tutorialLines;
+
+    private const string LineRegex = @"\|[0-9]+\|";
+    private static readonly Regex AlarmRegex = new ("exception|warning|incorrect|timeout|unable|cannot|fail|can't",
+        RegexOptions.IgnoreCase);
+    private static readonly Regex CheatRegex = new ("cheat", RegexOptions.IgnoreCase);
+    private static readonly Regex ModelExp = new (@"(\[PlayerService\])|(\[Server\])|(Request:)|(Response:)|(Received response)",
+        RegexOptions.IgnoreCase);
+    private static readonly Regex TutorialExp = new ("tutorial", RegexOptions.IgnoreCase);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -40,6 +130,10 @@
                     if (_logInfo == null)
                     {
                         _title = "Log not found";
+                    }
+                    else
+                    {
+                        CountLines();
                     }
                 }
                 catch 
@@ -57,4 +151,74 @@
             _title = "Identifier not set";
         }
     }
+
+    private Task HandleTabSelection(TabId tabId)
+    {
+        _currentTab = tabId;
+        return Task.CompletedTask;
+    }
+
+    // private async Task<List<string>?> FilteringLogContent(TabId tabId)
+    // {
+    //     switch (tabId)
+    //     {
+    //         case TabId.Alarm:
+    //             return await Task.FromResult(_alarmLines);
+    //         case TabId.Cheat:
+    //             return await Task.FromResult(_cheatLines);
+    //         case TabId.Model:
+    //             return await Task.FromResult(_modelLines);
+    //         case TabId.Tutorial:
+    //             return await Task.FromResult(_tutorialLines);
+    //         default:
+    //             throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null);
+    //     }
+    // }
+    
+    private void CountLines()
+    {
+        if (_logInfo == null)
+            return;
+        
+        var totalLines = Regex.Split(_logInfo.Contents, LineRegex);
+
+        foreach (var line in totalLines)
+        {
+            if (AlarmRegex.IsMatch(line))
+            {
+                _alarmLines ??= new List<string>();
+                _alarmLines.Add(line);
+                _alarmCount++;
+            }
+            if (CheatRegex.IsMatch(line))
+            {
+                _cheatLines ??= new List<string>();
+                _cheatLines.Add(line);
+                _cheatCount++;
+            }
+            if (ModelExp.IsMatch(line))
+            {
+                _modelLines ??= new List<string>();
+                _modelLines.Add(line);
+                _modelCount++;
+            }
+            if (TutorialExp.IsMatch(line))
+            {
+                _tutorialLines ??= new List<string>();
+                _tutorialLines.Add(line);
+                _tutorialCount++;
+            }
+            
+            var error = Regex.IsMatch(line, "error");
+            var fakeError = Regex.IsMatch(line, "error\":null");
+            if (error != fakeError)
+                _alarmCount++;
+        }
+    }
 }
+
+<script>
+    function toggleExpand(element) {
+        element.classList.toggle('expanded');
+    }
+</script>

@@ -43,6 +43,50 @@ h1:focus {
 }
 
 .log-content{
-    white-space: pre-line;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     text-align: left;
+}
+
+.thick-nav-tabs{
+    border-bottom: 8px solid #1a1d20;
+}
+
+.dark-badge{
+    background-color: #4d5154;
+    color: white;
+}
+
+.v-offset-with-tabs{
+    position: relative;
+    top: -50px;
+}
+
+.text-block {
+    overflow: hidden;
+    width: 100%;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: max-height 0.3s ease, height 0.3s ease;
+    max-height: 5em;
+}
+
+.text-block::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    height: 1em;
+    background: linear-gradient(to bottom, transparent 20%, white 100%);
+    pointer-events: none;
+}
+
+.text-block.expanded {
+    max-height: none;
+    height: auto;
+    mask-image: none;
 }
