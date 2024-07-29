@@ -50,11 +50,11 @@ h1:focus {
 }
 
 .thick-nav-tabs{
-    border-bottom: 8px solid #1a1d20;
+    border-bottom: 8px solid #5B83B5;
 }
 
 .dark-badge{
-    background-color: #4d5154;
+    background-color: #5B83B5;
     color: white;
 }
 
@@ -92,4 +92,14 @@ h1:focus {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #CBDDF2 !important; 
+    color: #333 !important;
+}
+
+.nav-tabs .nav-link {
+    background-color: #f1f1f1 !important;
+    color: #333 !important;
 }
