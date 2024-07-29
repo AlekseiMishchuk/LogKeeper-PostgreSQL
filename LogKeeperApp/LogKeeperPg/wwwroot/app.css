@@ -103,3 +103,17 @@ h1:focus {
     background-color: #f1f1f1 !important;
     color: #333 !important;
 }
+
+button.bi {
+    height: 100%; 
+    aspect-ratio: 1 / 1;
+    border: none; 
+    background: none; 
+    font-size: 1.3rem; 
+    padding: 0.5rem; 
+    cursor: pointer; 
+}
+
+button.bi:hover {
+    color: #5B83B5;
+}
