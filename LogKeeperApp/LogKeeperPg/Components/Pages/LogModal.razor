@@ -1,8 +1,14 @@
 @using LogKeeperPg.Models
 
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <div class="modal fade modal-xl" id="@GetLogModalId(Log)" tabindex="-1">
+    <div class="toast top-0 start-50 mt-2 translate-middle-x w-25" role="alert" id="clipboardToast" data-bs-autohide="true" data-bs-delay="1500">
+        <div class="toast-body text-center">
+            Link copied to clipboard!
+        </div>
+    </div>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,6 +16,12 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="modal-title mb-3">@Log?.Title</h5>
                         <div class="mb-3">
+                            <button type="button"
+                                    class="bi bi-copy"
+                                    data-bs-toggle="toast"
+                                    @onclick="CopyLinkToClipboard"></button>
+                            <button type="button"
+                                    class="bi bi-box-arrow-in-up-right"></button>
                             <button type="button"
                                     class="bi bi-arrows-fullscreen align-self-center p-0 mx-2"
                                     data-bs-dismiss="modal"
@@ -19,20 +31,29 @@
                                     data-bs-dismiss="modal"></button>
                         </div>
                     </div>
+
                     <p>Author: @Log?.Author</p>
                     <p>Project: @Log?.Project</p>
                     <span>Time: @Log?.Time</span>
                 </div>
-                
-                
-               
             </div>
+
             <div class="modal-body">
                 <p class="log-content">@Log?.Contents</p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.toast').forEach(toastEl => new bootstrap.Toast(toastEl));
+    });
+
+    function showToast() {
+        new bootstrap.Toast(document.getElementById('clipboardToast')).show();
+    }
+</script>
 
 @code {
     [Parameter]
@@ -50,5 +71,15 @@
             return;
         
         NavigationManager.NavigateTo($"/get-log/{logId}");
+    }
+    
+    private async Task CopyLinkToClipboard()
+    {
+        if (Log?.Uuid == null)
+            return;
+        
+        var url = NavigationManager.ToAbsoluteUri($"/get-log/{Log.Uuid}");
+        await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url.ToString());
+        await JsRuntime.InvokeVoidAsync("showToast");
     }
 }

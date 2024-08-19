@@ -117,3 +117,9 @@ button.bi {
 button.bi:hover {
     color: #5B83B5;
 }
+
+.toast{
+    z-index: 1050;
+    position: absolute;
+}
+
