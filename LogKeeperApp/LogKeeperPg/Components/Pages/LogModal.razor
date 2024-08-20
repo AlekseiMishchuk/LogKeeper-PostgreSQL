@@ -21,7 +21,8 @@
                                     data-bs-toggle="toast"
                                     @onclick="CopyLinkToClipboard"></button>
                             <button type="button"
-                                    class="bi bi-box-arrow-in-up-right"></button>
+                                    class="bi bi-box-arrow-in-up-right"
+                                    @onclick="() => OpenLinkInNewTab(Log?.Uuid)"></button>
                             <button type="button"
                                     class="bi bi-arrows-fullscreen align-self-center p-0 mx-2"
                                     data-bs-dismiss="modal"
@@ -31,7 +32,6 @@
                                     data-bs-dismiss="modal"></button>
                         </div>
                     </div>
-
                     <p>Author: @Log?.Author</p>
                     <p>Project: @Log?.Project</p>
                     <span>Time: @Log?.Time</span>
@@ -53,6 +53,10 @@
     function showToast() {
         new bootstrap.Toast(document.getElementById('clipboardToast')).show();
     }
+    
+    function openLinkInNewTab(url){
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 </script>
 
 @code {
@@ -69,10 +73,25 @@
     {
         if (logId == Guid.Empty)
             return;
-        
-        NavigationManager.NavigateTo($"/get-log/{logId}");
+
+        var url = GetLogUrl(logId); 
+        NavigationManager.NavigateTo(url);
     }
     
+    private void OpenLinkInNewTab(Guid? logId)
+    {
+        if (logId == null)
+            return;
+        
+        var url = GetLogUrl(logId);
+        JsRuntime.InvokeVoidAsync("openLinkInNewTab", url);
+    }
+
+    private string GetLogUrl(Guid? logId)
+    {
+        return NavigationManager.ToAbsoluteUri($"/get-log/{logId}").ToString();
+    }
+
     private async Task CopyLinkToClipboard()
     {
         if (Log?.Uuid == null)
