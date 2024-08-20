@@ -4,7 +4,7 @@
 @inject IJSRuntime JsRuntime
 
 <div class="modal fade modal-xl" id="@GetLogModalId(Log)" tabindex="-1">
-    <div class="toast top-0 start-50 mt-2 translate-middle-x w-25" role="alert" id="clipboardToast" data-bs-autohide="true" data-bs-delay="1500">
+    <div class="toast top-0 start-50 mt-2 translate-middle-x w-25" role="alert" id="@GetToastId(Log)" data-bs-autohide="true" data-bs-delay="1500">
         <div class="toast-body text-center">
             Link copied to clipboard!
         </div>
@@ -50,8 +50,8 @@
         document.querySelectorAll('.toast').forEach(toastEl => new bootstrap.Toast(toastEl));
     });
 
-    function showToast() {
-        new bootstrap.Toast(document.getElementById('clipboardToast')).show();
+    function showToast(toastId) {
+        new bootstrap.Toast(document.getElementById(toastId)).show();
     }
     
     function openLinkInNewTab(url){
@@ -67,6 +67,12 @@
     {
         ArgumentNullException.ThrowIfNull(log);
         return $"logModal-{log.Uuid.ToString()}";
+    }
+    
+    public static string GetToastId(LogInformation? log)
+    {
+        ArgumentNullException.ThrowIfNull(log);
+        return $"toast-{log.Uuid.ToString()}";
     }
 
     private void LeadToFullscreenLog(Guid? logId)
@@ -99,6 +105,6 @@
         
         var url = NavigationManager.ToAbsoluteUri($"/get-log/{Log.Uuid}");
         await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url.ToString());
-        await JsRuntime.InvokeVoidAsync("showToast");
+        await JsRuntime.InvokeVoidAsync("showToast", GetToastId(Log));
     }
 }
