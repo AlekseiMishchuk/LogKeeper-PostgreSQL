@@ -13,7 +13,10 @@
 @if (_logInfo != null)
 {
     <div>
-        <h1>@_logInfo.Title</h1>
+        <div class="d-flex justify-content-between">
+            <h1>@_logInfo.Title</h1>
+            <div class="align-self-center p-0 mx-2"><LogActions Log="_logInfo"/></div>
+        </div>
         <p>Author: @_logInfo.Author</p>
         <p>Project: @_logInfo.Project</p>
         <p>Time: @_logInfo.Time</p>

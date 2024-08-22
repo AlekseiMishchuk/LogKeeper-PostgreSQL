@@ -1,0 +1,55 @@
+@using LogKeeperPg.Models
+
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<button type="button"
+        class="bi bi-copy"
+        data-bs-toggle="toast"
+        @onclick="CopyLinkToClipboard"></button>
+<button type="button"
+        class="bi bi-box-arrow-in-up-right"
+        @onclick="() => OpenLinkInNewTab(Log?.Uuid)"></button>
+
+<div class="toast top-0 start-50 translate-middle-x w-25" role="alert" id="@GetToastId(Log)" data-bs-autohide="true" data-bs-delay="1500">
+    <div class="toast-body text-center">
+        Link copied to clipboard!
+    </div>
+</div>
+
+<script src="/js/toast.js"></script>
+
+@code {
+    [Parameter]
+    public LogInformation? Log { get; set; }
+
+    private void OpenLinkInNewTab(Guid? logId)
+    {
+        if (logId == null)
+            return;
+
+        var url = GetLogUrl(logId);
+        JsRuntime.InvokeVoidAsync("openLinkInNewTab", url);
+    }
+
+    private string GetLogUrl(Guid? logId)
+    {
+        return NavigationManager.ToAbsoluteUri($"/get-log/{logId}").ToString();
+    }
+
+    private async Task CopyLinkToClipboard()
+    {
+        if (Log?.Uuid == null)
+            return;
+
+        var url = NavigationManager.ToAbsoluteUri($"/get-log/{Log.Uuid}");
+        await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url.ToString());
+        await JsRuntime.InvokeVoidAsync("showToast", GetToastId(Log));
+    }
+
+    private string GetToastId(LogInformation? log)
+    {
+        ArgumentNullException.ThrowIfNull(log);
+        return $"toast-{log.Uuid.ToString()}";
+    }
+}
