@@ -6,10 +6,16 @@
 <button type="button"
         class="bi bi-copy"
         data-bs-toggle="toast"
+        title="Copy link to clipboard"
         @onclick="CopyLinkToClipboard"></button>
 <button type="button"
         class="bi bi-box-arrow-in-up-right"
+        title="Open in new tab"
         @onclick="() => OpenLinkInNewTab(Log?.Uuid)"></button>
+<button type="button"
+        class="bi bi-cloud-download"
+        title="Download Log"
+        @onclick="DownloadLog"></button>
 
 <div class="toast top-0 start-50 translate-middle-x w-25" role="alert" id="@GetToastId(Log)" data-bs-autohide="true" data-bs-delay="1500">
     <div class="toast-body text-center">
@@ -18,6 +24,7 @@
 </div>
 
 <script src="/js/toast.js"></script>
+<script src="/js/downloadLog.js"></script>
 
 @code {
     [Parameter]
@@ -45,6 +52,16 @@
         var url = NavigationManager.ToAbsoluteUri($"/get-log/{Log.Uuid}");
         await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url.ToString());
         await JsRuntime.InvokeVoidAsync("showToast", GetToastId(Log));
+    }
+
+    private async Task DownloadLog()
+    {
+        if (Log == null)
+        {
+            return;
+        }
+        
+        await JsRuntime.InvokeVoidAsync("downloadLog", Log.Title, Log.Author, Log.Project, Log.Time, Log.Contents);
     }
 
     private string GetToastId(LogInformation? log)
