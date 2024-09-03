@@ -1,9 +1,10 @@
 @using LogKeeperPg.Models
 @using LogKeeperPg.Services
+@using LogKeeperPg.Settings
 
 @inject LogService LogService
 @inject NavigationManager NavigationManager
-@inject GlobalVariablesService Variables
+@inject PaginationSettings Variables
 
 
 @if (_currentPageLogs != null)

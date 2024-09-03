@@ -1,5 +1,6 @@
 using LogKeeperPg.Data;
 using LogKeeperPg.Models;
+using LogKeeperPg.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace LogKeeperPg.Services;
@@ -7,9 +8,9 @@ namespace LogKeeperPg.Services;
 public class LogService
 {
     private readonly PostgresDbContext _context;
-    private readonly GlobalVariablesService _variables;
+    private readonly PaginationSettings _variables;
     
-    public LogService(PostgresDbContext context, GlobalVariablesService variables)
+    public LogService(PostgresDbContext context, PaginationSettings variables)
     {
         _context = context;
         _variables = variables;
