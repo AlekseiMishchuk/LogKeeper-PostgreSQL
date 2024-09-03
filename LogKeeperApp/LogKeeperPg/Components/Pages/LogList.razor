@@ -2,7 +2,7 @@
 @using LogKeeperPg.Services
 @using LogKeeperPg.Settings
 
-@inject LogService LogService
+@inject GetLogService GetLogService
 @inject NavigationManager NavigationManager
 @inject PaginationSettings Variables
 
@@ -48,14 +48,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _totalLogsCount = await LogService.GetLogsCountAsync();
-        _currentPageLogs = await LogService.GetLogsByPageAsync(1);
+        _totalLogsCount = await GetLogService.GetLogsCountAsync();
+        _currentPageLogs = await GetLogService.GetLogsByPageAsync(1);
     }
 
     protected override async Task OnParametersSetAsync()
     {
         CurrentPage = Math.Max(CurrentPage, 1);
-        _currentPageLogs = await LogService.GetLogsByPageAsync(CurrentPage);
+        _currentPageLogs = await GetLogService.GetLogsByPageAsync(CurrentPage);
         _parentTaskCompletion.SetResult(true);
     }
 

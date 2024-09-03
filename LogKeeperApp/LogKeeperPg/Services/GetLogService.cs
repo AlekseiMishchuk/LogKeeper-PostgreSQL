@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogKeeperPg.Services;
 
-public class LogService
+public class GetLogService
 {
     private readonly PostgresDbContext _context;
     private readonly PaginationSettings _variables;
     
-    public LogService(PostgresDbContext context, PaginationSettings variables)
+    public GetLogService(PostgresDbContext context, PaginationSettings variables)
     {
         _context = context;
         _variables = variables;

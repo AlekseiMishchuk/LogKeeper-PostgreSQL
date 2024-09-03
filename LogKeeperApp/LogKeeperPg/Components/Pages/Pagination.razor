@@ -2,7 +2,7 @@
 @using LogKeeperPg.Settings
 
 @inject PaginationSettings Variables
-@inject LogService LogService
+@inject GetLogService GetLogService
 
     <nav class="d-flex justify-content-center">
         <ul class="pagination">
@@ -52,7 +52,7 @@
     protected override async Task OnInitializedAsync()
     {
         await ParentTaskCompletion.Task;
-        _totalPages = await LogService.GetLogsCountAsync() / Variables.ElementsPerPage;
+        _totalPages = await GetLogService.GetLogsCountAsync() / Variables.ElementsPerPage;
         CalculatePageThresholds();
     }
     
