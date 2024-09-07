@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogKeeperPg.Models;
 
-[Index(nameof(LogInformation.Uuid), IsUnique = true)]
+[Index(nameof(Uuid), IsUnique = true)]
 public class LogInformation
 {
     public LogInformation(Guid uuid,

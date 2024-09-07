@@ -118,6 +118,15 @@ button.bi:hover {
     color: #5B83B5;
 }
 
+.pagination .page-item .page-link {
+    color:#5B83B5; /* Text color */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #5B83B5; /* Active page background */
+    color: white; /* Active page text color */
+}
+
 .toast{
     z-index: 1050;
     position: absolute;

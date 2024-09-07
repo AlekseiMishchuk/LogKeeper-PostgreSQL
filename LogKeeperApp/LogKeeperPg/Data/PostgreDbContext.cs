@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogKeeperPg.Data;
 
-public class PostgresDbContext : DbContext
+public sealed class PostgresDbContext : DbContext
 {
     public DbSet<LogInformation> Logs { get; set; }
     

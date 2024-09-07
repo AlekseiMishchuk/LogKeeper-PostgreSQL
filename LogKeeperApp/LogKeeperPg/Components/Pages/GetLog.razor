@@ -155,10 +155,9 @@
         }
     }
 
-    private Task HandleTabSelection(TabId tabId)
+    private void HandleTabSelection(TabId tabId)
     {
         _currentTab = tabId;
-        return Task.CompletedTask;
     }
     
     private void CountLines()

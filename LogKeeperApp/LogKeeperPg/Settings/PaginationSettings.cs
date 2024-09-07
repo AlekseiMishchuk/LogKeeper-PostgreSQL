@@ -2,6 +2,7 @@ namespace LogKeeperPg.Settings;
 
 public class PaginationSettings
 {
-    public int ElementsPerPage { get; } = 10;
-    public int PaginationElements { get; } = 5;
+    public int ElementsPerPage => 10;
+
+    public int VisiblePageButtons => 5;
 }

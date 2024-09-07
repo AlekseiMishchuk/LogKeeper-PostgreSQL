@@ -54,7 +54,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        CurrentPage = Math.Max(CurrentPage, 1);
+        CurrentPage = Math.Max(1, CurrentPage);
         _currentPageLogs = await GetLogService.GetLogsByPageAsync(CurrentPage);
         _parentTaskCompletion.SetResult(true);
     }

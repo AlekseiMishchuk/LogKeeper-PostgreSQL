@@ -1,7 +1,7 @@
 @using LogKeeperPg.Services
 @using LogKeeperPg.Settings
 
-@inject PaginationSettings Variables
+@inject PaginationSettings PaginationSettings
 @inject GetLogService GetLogService
 
     <nav class="d-flex justify-content-center">
@@ -52,19 +52,19 @@
     protected override async Task OnInitializedAsync()
     {
         await ParentTaskCompletion.Task;
-        _totalPages = await GetLogService.GetLogsCountAsync() / Variables.ElementsPerPage;
+        _totalPages = await GetLogService.GetLogsCountAsync() / PaginationSettings.ElementsPerPage;
         CalculatePageThresholds();
     }
     
     private void CalculatePageThresholds()
     {
-        _minPagesThreshold = Math.Max(CurrentPage - Variables.PaginationElements / 2, 1);
-        _maxPagesThreshold = Math.Min(CurrentPage + Variables.PaginationElements / 2, _totalPages);
+        _minPagesThreshold = Math.Max(CurrentPage - PaginationSettings.VisiblePageButtons / 2, 1);
+        _maxPagesThreshold = Math.Min(CurrentPage + PaginationSettings.VisiblePageButtons / 2, _totalPages);
         
         var pageElementsOnScreen = _maxPagesThreshold - _minPagesThreshold;
-        if (pageElementsOnScreen < Variables.PaginationElements)
+        if (pageElementsOnScreen < PaginationSettings.VisiblePageButtons)
         {
-            _maxPagesThreshold = _minPagesThreshold + Variables.PaginationElements;
+            _maxPagesThreshold = _minPagesThreshold + PaginationSettings.VisiblePageButtons;
         }
     }
 }

@@ -7,14 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var route = builder.Configuration["LogKeeperUrl"] ?? 
-            throw new Exception("LogKeeperUrl is not set"); 
+var route = builder.Configuration["LogKeeperUrl"] ?? throw new Exception("LogKeeperUrl is not set"); 
 
 builder.Services.AddRazorComponents(options => 
         options.DetailedErrors = builder.Environment.IsDevelopment())
         .AddInteractiveServerComponents();
-builder.Services.AddDbContext<PostgresDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PgConnection")));
+builder.Services.AddDbContext<PostgresDbContext>(options => 
+        options.UseNpgsql(builder.Configuration.GetConnectionString("PgConnection")));
 builder.Services.AddHttpClient<GetLog>(client => client.BaseAddress = new Uri(route));
 builder.Services.AddSingleton<PaginationSettings>();
 builder.Services.AddScoped<LogSavingService>();
@@ -23,11 +22,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
+
 app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
