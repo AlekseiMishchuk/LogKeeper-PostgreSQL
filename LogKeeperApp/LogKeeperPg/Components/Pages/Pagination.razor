@@ -41,8 +41,6 @@
     [CascadingParameter]
     public int CurrentPage { get; set; }
     [Parameter]
-    public EventCallback OnLogListInitializationComplete { get; set; }
-    [Parameter]
     public required TaskCompletionSource<bool> ParentTaskCompletion { get; set; }
 
     private int _totalPages;
