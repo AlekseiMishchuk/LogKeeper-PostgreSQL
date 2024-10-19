@@ -11,7 +11,7 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Content Include="..\docker-compose-local-postgresql.yml">
+      <Content Include="..\docker-compose-local-db.yml">
         <Link>docker-compose-local-postgresql.yml</Link>
       </Content>
       <Content Include="..\docker-compose.yml">
