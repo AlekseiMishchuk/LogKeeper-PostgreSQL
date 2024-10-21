@@ -1,7 +1,7 @@
 # LogKeeper
 
 LogKeeper is a web-based log storage system designed to work with PostgreSQL. It was originally created for a Unity project but can be easily adapted to other applications. The repository includes Docker Compose files for building containers, either for a self-sufficient stack that deploys both the app and the database, or for running just the app when a database is already deployed elsewhere.
-![localhost_5171 · 12 00am · 10-22](https://github.com/user-attachments/assets/6eecc849-d8db-4433-a4d4-35dae28a01c4)
+<img alt ="main" src="https://github.com/user-attachments/assets/6eecc849-d8db-4433-a4d4-35dae28a01c4" width="500"> <img alt="localhost" src="https://github.com/user-attachments/assets/67ed358a-73f2-4204-b87a-7bcdbf7490e2" width ="500">
 
 ## Features
 
