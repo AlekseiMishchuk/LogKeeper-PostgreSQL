@@ -15,7 +15,6 @@ LogKeeper is a web-based log storage system designed to work with PostgreSQL. It
 
 ### Additional Features
 
-- **Log Grouping**: Logs can be organized into blocks, allowing for better structuring and management.
 - **Filtering**: The application supports filtering logs based on regex criteria and can be easily modified. This helps to quickly locate specific logs.
 - **Download Logs**: Logs can be downloaded as files, providing easy access for external review or backup purposes.
 <img width="1325" alt="Screenshot 2024-10-21 at 23 58 35" src="https://github.com/user-attachments/assets/b892d37f-aba1-480b-9188-4764d8cd8e39">
